@@ -1,4 +1,4 @@
-const startInterval = 1000;
+const startInterval = 1000*60*60*64;
 const Nightmare = require('nightmare');
 const path = require('path');
 const fs = require ('fs');
@@ -13,8 +13,6 @@ let nightmare = new Nightmare({
   width: 1024,
   height: 768
 })
-console.log(ms(1000*60*60*32));
-console.log(ms(1000*60*60*64));
 if(!fs.existsSync(logDir)){
     fs.mkdirSync(logDir);
 }
