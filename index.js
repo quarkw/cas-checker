@@ -1,8 +1,8 @@
-const startInterval = 1000*60*60*8;
+const startInterval = 1000;
 const Nightmare = require('nightmare');
 const path = require('path');
 const fs = require ('fs');
-const ms = require('ms');
+const ms = require('pretty-ms');
 
 const logDir = "./logs";
 const debugDir = "./debug";
@@ -13,7 +13,8 @@ let nightmare = new Nightmare({
   width: 1024,
   height: 768
 })
-
+console.log(ms(1000*60*60*32));
+console.log(ms(1000*60*60*64));
 if(!fs.existsSync(logDir)){
     fs.mkdirSync(logDir);
 }
@@ -28,6 +29,13 @@ function keepSessionAlive(){
 }
 
 function isLoggedIn(interval=0){
+    nightmare.cookies.get({ url: null }).then( (cookies) => {
+        fs.writeFile(`./logs/${ms(interval)}.cookie`, cookies.map( cookie => JSON.stringify(cookie)), (err) => {
+            if(err){
+                console.log(err);
+            }
+        })
+    })
     return nightmare
         .goto('https://login.vcu.edu/cas/login')
         .wait('body')

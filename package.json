@@ -6,7 +6,8 @@
   "dependencies": {
     "ms": "^2.0.0",
     "nightmare": "^2.10.0",
-    "nightmarejs": "^0.0.1"
+    "nightmarejs": "^0.0.1",
+    "pretty-ms": "^2.1.0"
   },
   "scripts": {
     "start": "node index"
