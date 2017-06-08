@@ -1,7 +1,8 @@
-const startInterval = 1000;
+const startInterval = 1000*60*60*8;
 const Nightmare = require('nightmare');
 const path = require('path');
 const fs = require ('fs');
+const ms = require('ms');
 
 const logDir = "./logs";
 const debugDir = "./debug";
@@ -19,7 +20,7 @@ if(!fs.existsSync(logDir)){
 if(!fs.existsSync(debugDir)){
     fs.mkdirSync(debugDir);
 }
-
+console.log("start");
 function keepSessionAlive(){
     return nightmare
         .goto("https://blackboard.vcu.edu/webapps/bb-auth-provider-cas-bb_bb60/execute/casLogin?cmd=login&authProviderId=_106_1&redirectUrl=https%3A%2F%2Fblackboard.vcu.edu%2Fwebapps%2Fportal%2Fframeset.jsp")
@@ -30,7 +31,7 @@ function isLoggedIn(interval=0){
     return nightmare
         .goto('https://login.vcu.edu/cas/login')
         .wait('body')
-        .screenshot(`./logs/${Math.floor(interval/1000)}Second.png`)
+        .screenshot(`./logs/${ms(interval)}.png`)
         .exists("div.msg.success");
 }
 
@@ -67,7 +68,7 @@ function findUpper(interval){
 function binarySearch(lower, upper){
     let middle = (lower+upper)/2;
     if((upper-lower)<180000) {    //If we know the value within +- 3 minutes, we should be able to guess the real value
-        console.log(`Timeout value is within 3 minutes of Math.floor(${middle/1000/60}) minutes`);
+        console.log(`Timeout value is within 3 minutes of ${ms(middle,{long: true})}`);
     }
     setTimeout(()=>{
         keepSessionAlive().then( () => {

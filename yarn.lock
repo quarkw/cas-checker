@@ -567,6 +567,10 @@ ms@0.7.3:
   version "0.7.3"
   resolved "https://registry.yarnpkg.com/ms/-/ms-0.7.3.tgz#708155a5e44e33f5fd0fc53e81d0d40a91be1fff"
 
+ms@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/ms/-/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
+
 nan@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/nan/-/nan-1.0.0.tgz#ae24f8850818d662fcab5acf7f3b95bfaa2ccf38"
@@ -1068,10 +1072,6 @@ yauzl@2.4.1:
   resolved "https://registry.yarnpkg.com/yauzl/-/yauzl-2.4.1.tgz#9528f442dab1b2284e58b4379bb194e22e0c4005"
   dependencies:
     fd-slicer "~1.0.1"
-
-yield@^0.0.6-8:
-  version "0.0.6-8"
-  resolved "https://registry.yarnpkg.com/yield/-/yield-0.0.6-8.tgz#e67e33c6225d1d83c4517582dee4269d6d0049f0"
 
 zeparser@0.0.5:
   version "0.0.5"
