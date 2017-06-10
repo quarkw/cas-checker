@@ -1,4 +1,4 @@
-const startInterval = 1000*60*60*64;
+const startInterval = 1000*60*60;
 const Nightmare = require('nightmare');
 const path = require('path');
 const fs = require ('fs');
@@ -35,10 +35,10 @@ function isLoggedIn(interval=0){
         })
     })
     return nightmare
-        .goto('https://login.vcu.edu/cas/login')
+        .goto('https://blackboard.vcu.edu/webapps/bb-auth-provider-cas-bb_bb60/execute/casLogin?cmd=login&authProviderId=_106_1&redirectUrl=https%3A%2F%2Fblackboard.vcu.edu%2Fwebapps%2Fportal%2Fframeset.jsp')
         .wait('body')
         .screenshot(`./logs/${ms(interval)}.png`)
-        .exists("div.msg.success");
+        .exists("#topframe\\.logout\\.label");
 }
 
 function loginToCAS(){
@@ -55,19 +55,17 @@ function loginToCAS(){
 function findUpper(interval){
     setTimeout(()=>{
         console.log(`Check ${interval/1000} second interval`);
-        keepSessionAlive().then( () => {
-            isLoggedIn(interval).then( (isLoggedIn) => {
-                if(isLoggedIn){
-                    console.log(`    Still logged in`);
-                    findUpper(interval*2);
-                } else {
-                    console.log(`    Login timed out`);
-                    loginToCAS().then( () => {
-                        binarySearch(interval, interval*2);
-                    });
-                }
-            })
-        });
+        isLoggedIn(interval).then( (isLoggedIn) => {
+            if(isLoggedIn){
+                console.log(`    Still logged in`);
+                findUpper(interval*2);
+            } else {
+                console.log(`    Login timed out`);
+                loginToCAS().then( () => {
+                    binarySearch(interval, interval*2);
+                }).catch( err => console.log(err) );
+            }
+        }).catch( err => console.log(err) );
     }, interval);
 }
 
@@ -77,19 +75,17 @@ function binarySearch(lower, upper){
         console.log(`Timeout value is within 3 minutes of ${ms(middle,{long: true})}`);
     }
     setTimeout(()=>{
-        keepSessionAlive().then( () => {
-            isLoggedIn(interval).then( (isLoggedIn) => {
-                if(isLoggedIn){
-                    console.log(`    Still logged in`);
-                    binarySearch(lower,middle);
-                } else {
-                    console.log(`    Login timed out`);
-                    loginToCAS().then( () => {
-                        binarySearch(middle, upper);
-                    });
-                }
-            })
-        });
+        isLoggedIn(interval).then( (isLoggedIn) => {
+            if(isLoggedIn){
+                console.log(`    Still logged in`);
+                binarySearch(lower,middle);
+            } else {
+                console.log(`    Login timed out`);
+                loginToCAS().then( () => {
+                    binarySearch(middle, upper);
+                }).catch( err => console.log(err) );
+            }
+        }).catch( err => console.log(err) );
     }, middle);
 }
 loginToCAS().then( () => {
