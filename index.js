@@ -28,7 +28,7 @@ function keepSessionAlive(){
 
 function isLoggedIn(interval=0){
     nightmare.cookies.get({ url: null }).then( (cookies) => {
-        fs.writeFile(`./logs/${ms(interval)}.cookie`, cookies.map( cookie => JSON.stringify(cookie)), (err) => {
+        fs.writeFile(`./logs/${ms(interval, {compact: true})}.cookie`, cookies.map( cookie => JSON.stringify(cookie)), (err) => {
             if(err){
                 console.log(err);
             }
@@ -37,7 +37,7 @@ function isLoggedIn(interval=0){
     return nightmare
         .goto('https://blackboard.vcu.edu/webapps/bb-auth-provider-cas-bb_bb60/execute/casLogin?cmd=login&authProviderId=_106_1&redirectUrl=https%3A%2F%2Fblackboard.vcu.edu%2Fwebapps%2Fportal%2Fframeset.jsp')
         .wait('body')
-        .screenshot(`./logs/${ms(interval)}.png`)
+        .screenshot(`./logs/${ms(interval, {compact: true})}.png`)
         .exists("#topframe\\.logout\\.label");
 }
 
@@ -53,8 +53,9 @@ function loginToCAS(){
 }
 
 function findUpper(interval){
+    console.log(`Checking ${ms(interval, {verbose: true})} second interval`);
     setTimeout(()=>{
-        console.log(`Check ${interval/1000} second interval`);
+        console.log(`${ms(interval, {verbose: true})} elapsed`);
         isLoggedIn(interval).then( (isLoggedIn) => {
             if(isLoggedIn){
                 console.log(`    Still logged in`);
@@ -63,7 +64,11 @@ function findUpper(interval){
                 console.log(`    Login timed out`);
                 loginToCAS().then( () => {
                     binarySearch(interval, interval*2);
-                }).catch( err => console.log(err) );
+                }).catch( err => {
+                    console.log(err) 
+                    console.log("resuming");
+                    binarySearch(interval, interval*2);
+                });
             }
         }).catch( err => console.log(err) );
     }, interval);
@@ -74,7 +79,9 @@ function binarySearch(lower, upper){
     if((upper-lower)<180000) {    //If we know the value within +- 3 minutes, we should be able to guess the real value
         console.log(`Timeout value is within 3 minutes of ${ms(middle,{long: true})}`);
     }
+    console.log(`Check ${ms(middle, {verbose: true})} second interval`);
     setTimeout(()=>{
+        console.log(`${ms(middle, {verbose: true})} elapsed`);
         isLoggedIn(interval).then( (isLoggedIn) => {
             if(isLoggedIn){
                 console.log(`    Still logged in`);
@@ -83,7 +90,11 @@ function binarySearch(lower, upper){
                 console.log(`    Login timed out`);
                 loginToCAS().then( () => {
                     binarySearch(middle, upper);
-                }).catch( err => console.log(err) );
+                }).catch( err => {
+                    console.log(err) 
+                    console.log("resuming");
+                    binarySearch(middle, upper);
+                });
             }
         }).catch( err => console.log(err) );
     }, middle);
