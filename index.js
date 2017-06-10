@@ -53,7 +53,7 @@ function loginToCAS(){
 }
 
 function findUpper(interval){
-    console.log(`Checking ${ms(interval, {verbose: true})} second interval`);
+    console.log(`Checking ${ms(interval, {verbose: true})} interval`);
     setTimeout(()=>{
         console.log(`${ms(interval, {verbose: true})} elapsed`);
         isLoggedIn(interval).then( (isLoggedIn) => {
@@ -79,7 +79,7 @@ function binarySearch(lower, upper){
     if((upper-lower)<180000) {    //If we know the value within +- 3 minutes, we should be able to guess the real value
         console.log(`Timeout value is within 3 minutes of ${ms(middle,{long: true})}`);
     }
-    console.log(`Check ${ms(middle, {verbose: true})} second interval`);
+    console.log(`Check ${ms(middle, {verbose: true})} interval`);
     setTimeout(()=>{
         console.log(`${ms(middle, {verbose: true})} elapsed`);
         isLoggedIn(interval).then( (isLoggedIn) => {
