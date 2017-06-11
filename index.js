@@ -1,4 +1,5 @@
 const startInterval = 1000*60*60;
+const keepSessionAliveTime = 1000*60*59;
 const Nightmare = require('nightmare');
 const path = require('path');
 const fs = require ('fs');
@@ -98,6 +99,23 @@ function binarySearch(lower, upper){
             }
         }).catch( err => console.log(err) );
     }, middle);
+}
+if(keepSessionAliveTime){
+    setTimeout(()=>{
+        keepSessionAlive().then( () => {
+
+        });
+    }, keepSessionAliveTime);
+}
+function keepAlive(){
+    setTimeout(()=>{
+        keepSessionAlive().then( () => {
+            keepAlive();
+        });
+    }, keepSessionAliveTime);
+}
+if(keepSessionAliveTime){
+    keepAlive();
 }
 loginToCAS().then( () => {
     findUpper(startInterval);
