@@ -82,7 +82,7 @@ function binarySearch(lower, upper){
     console.log(`Check ${ms(middle, {verbose: true})} interval`);
     setTimeout(()=>{
         console.log(`${ms(middle, {verbose: true})} elapsed`);
-        isLoggedIn(interval).then( (isLoggedIn) => {
+        isLoggedIn(middle).then( (isLoggedIn) => {
             if(isLoggedIn){
                 console.log(`    Still logged in`);
                 binarySearch(lower,middle);
