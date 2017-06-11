@@ -1,4 +1,4 @@
-const startInterval = 1000*60*60;
+const startInterval = 1000*60*60*8;
 const keepSessionAliveTime = 1000*60*59;
 const Nightmare = require('nightmare');
 const path = require('path');
@@ -29,7 +29,7 @@ function keepSessionAlive(){
 
 function isLoggedIn(interval=0){
     nightmare.cookies.get({ url: null }).then( (cookies) => {
-        fs.writeFile(`./logs/${ms(interval, {compact: true})}.cookie`, cookies.map( cookie => JSON.stringify(cookie)), (err) => {
+        fs.writeFile(`./logs/${ms(interval)}.cookie`, cookies.map( cookie => JSON.stringify(cookie)), (err) => {
             if(err){
                 console.log(err);
             }
@@ -38,7 +38,7 @@ function isLoggedIn(interval=0){
     return nightmare
         .goto('https://blackboard.vcu.edu/webapps/bb-auth-provider-cas-bb_bb60/execute/casLogin?cmd=login&authProviderId=_106_1&redirectUrl=https%3A%2F%2Fblackboard.vcu.edu%2Fwebapps%2Fportal%2Fframeset.jsp')
         .wait('body')
-        .screenshot(`./logs/${ms(interval, {compact: true})}.png`)
+        .screenshot(`./logs/${ms(interval)}.png`)
         .exists("#topframe\\.logout\\.label");
 }
 
@@ -80,7 +80,7 @@ function binarySearch(lower, upper){
     if((upper-lower)<180000) {    //If we know the value within +- 3 minutes, we should be able to guess the real value
         console.log(`Timeout value is within 3 minutes of ${ms(middle,{long: true})}`);
     }
-    console.log(`Check ${ms(middle, {verbose: true})} interval between ${ms(lower, {compact: true})} and ${ms(upper, {compact: true})}`);
+    console.log(`Check ${ms(middle, {verbose: true})} interval between ${ms(lower)} and ${ms(upper)}`);
     setTimeout(()=>{
         console.log(`${ms(middle, {verbose: true})} elapsed`);
         isLoggedIn(middle).then( (isLoggedIn) => {
