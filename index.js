@@ -1,4 +1,4 @@
-const startInterval = 1000*60*60*8;
+const startInterval = 1000*60*60*1.25;
 const keepSessionAliveTime = 1000*60*59;
 const Nightmare = require('nightmare');
 const path = require('path');
@@ -100,16 +100,10 @@ function binarySearch(lower, upper){
         }).catch( err => console.log(err) );
     }, middle);
 }
-if(keepSessionAliveTime){
-    setTimeout(()=>{
-        keepSessionAlive().then( () => {
-
-        });
-    }, keepSessionAliveTime);
-}
 function keepAlive(){
     setTimeout(()=>{
         keepSessionAlive().then( () => {
+            console.log(`Keep session alive at ${new Date().toUTCString()}`);
             keepAlive();
         });
     }, keepSessionAliveTime);
