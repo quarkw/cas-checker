@@ -21,12 +21,31 @@ if(!fs.existsSync(debugDir)){
     fs.mkdirSync(debugDir);
 }
 console.log("start");
+// function keepSessionAlive(){
+//     return nightmare
+//         .goto("https://blackboard.vcu.edu/webapps/bb-auth-provider-cas-bb_bb60/execute/casLogin?cmd=login&authProviderId=_106_1&redirectUrl=https%3A%2F%2Fblackboard.vcu.edu%2Fwebapps%2Fportal%2Fframeset.jsp")
+//         .wait('body');
+// }
 function keepSessionAlive(){
     return nightmare
-        .goto("https://blackboard.vcu.edu/webapps/bb-auth-provider-cas-bb_bb60/execute/casLogin?cmd=login&authProviderId=_106_1&redirectUrl=https%3A%2F%2Fblackboard.vcu.edu%2Fwebapps%2Fportal%2Fframeset.jsp")
+        .goto("https://ssb.vcu.edu/proddad/twbkwbis.P_GenMenu?name=bmenu.P_GenMnu")
         .wait('body');
 }
 
+// function isLoggedIn(interval=0){
+//     nightmare.cookies.get({ url: null }).then( (cookies) => {
+//         fs.writeFile(`./logs/${ms(interval)}.cookie`, cookies.map( cookie => JSON.stringify(cookie)), (err) => {
+//             if(err){
+//                 console.log(err);
+//             }
+//         })
+//     })
+//     return nightmare
+//         .goto('https://blackboard.vcu.edu/webapps/bb-auth-provider-cas-bb_bb60/execute/casLogin?cmd=login&authProviderId=_106_1&redirectUrl=https%3A%2F%2Fblackboard.vcu.edu%2Fwebapps%2Fportal%2Fframeset.jsp')
+//         .wait('body')
+//         .screenshot(`./logs/${ms(interval)}.png`)
+//         .exists("#topframe\\.logout\\.label");
+// }
 function isLoggedIn(interval=0){
     nightmare.cookies.get({ url: null }).then( (cookies) => {
         fs.writeFile(`./logs/${ms(interval)}.cookie`, cookies.map( cookie => JSON.stringify(cookie)), (err) => {
@@ -36,20 +55,31 @@ function isLoggedIn(interval=0){
         })
     })
     return nightmare
-        .goto('https://blackboard.vcu.edu/webapps/bb-auth-provider-cas-bb_bb60/execute/casLogin?cmd=login&authProviderId=_106_1&redirectUrl=https%3A%2F%2Fblackboard.vcu.edu%2Fwebapps%2Fportal%2Fframeset.jsp')
+        .goto('https://ssb.vcu.edu/proddad/twbkwbis.P_GenMenu?name=bmenu.P_GenMnu')
         .wait('body')
         .screenshot(`./logs/${ms(interval)}.png`)
-        .exists("#topframe\\.logout\\.label");
+        .exists("#ssbbackurl");
 }
+
+// function loginToCAS(){
+//     return nightmare
+//         .goto('https://login.vcu.edu/cas/login')
+//         .type('#username', process.env.username)
+//         .type('#password', process.env.password)
+//         .screenshot('./logs/loginPage.png')
+//         .click("button")
+//         .wait("div.msg.success")
+//         .screenshot('./logs/loggedIn.png');
+// }
 
 function loginToCAS(){
     return nightmare
-        .goto('https://login.vcu.edu/cas/login')
-        .type('#username', process.env.username)
-        .type('#password', process.env.password)
+        .goto('https://ssb.vcu.edu/proddad/twbkwbis.P_GenMenu?name=bmenu.P_MainMnu')
+        .type('#UserID', process.env.username)
+        .type('input[name="PIN"]', process.env.password)
         .screenshot('./logs/loginPage.png')
-        .click("button")
-        .wait("div.msg.success")
+        .click('input[type="submit"]')
+        .wait("#ssbbackurl")
         .screenshot('./logs/loggedIn.png');
 }
 
