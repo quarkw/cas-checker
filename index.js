@@ -1,5 +1,5 @@
 const startInterval = 1000*60*60*1.25;
-const keepSessionAliveTime = 1000*60*59;
+const keepSessionAliveTime = 1000*60*30;
 const Nightmare = require('nightmare');
 const path = require('path');
 const fs = require ('fs');
