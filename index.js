@@ -5,7 +5,7 @@ const path = require('path');
 const fs = require ('fs');
 const ms = require('pretty-ms');
 
-const startTime = Date.getTime();
+const startTime = Date.now();
 
 const logDir = "./logs";
 const debugDir = "./debug";
@@ -142,7 +142,7 @@ function keepAlive(){
                     keepAlive();
                 } else {
                     console.log(`   Login timed out`);
-                    console.log(ms(Date.getTime()-startTime, {verbose: true}));
+                    console.log(ms(Date.now()-startTime, {verbose: true}));
                 }
             }).catch( err => console.log(err));
         });
