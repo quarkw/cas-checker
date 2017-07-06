@@ -116,8 +116,8 @@ function binarySearch(lower, upper){
     console.log(`Check ${ms(middle, {verbose: true})} interval between ${ms(lower)} and ${ms(upper)}`);
     setTimeout(()=>{
         console.log(`${ms(middle, {verbose: true})} elapsed`);
-        isLoggedIn(middle).then( (isLoggedIn) => {
-            if(isLoggedIn){
+        isLoggedIn(middle).then( (loggedIn) => {
+            if(loggedIn){
                 console.log(`    Still logged in`);
                 binarySearch(middle,upper);
             } else {
@@ -137,8 +137,8 @@ function keepAlive(){
     setTimeout(()=>{
         keepSessionAlive().then( () => {
             console.log(`Keep session alive at ${new Date().toUTCString()}`);
-            isLoggedIn.then( (isLoggedIn) => {
-                if(isLoggedIn){
+            isLoggedIn().then( (loggedIn) => {
+                if(loggedIn){
                     keepAlive();
                 } else {
                     console.log(`   Login timed out`);
