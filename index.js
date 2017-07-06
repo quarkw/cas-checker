@@ -1,9 +1,11 @@
-const startInterval = 1000*60*60*1.25;
-const keepSessionAliveTime = 1000*60*30;
+const startInterval = 1000*60*60*5;
+const keepSessionAliveTime = 1000*60*20;
 const Nightmare = require('nightmare');
 const path = require('path');
 const fs = require ('fs');
 const ms = require('pretty-ms');
+
+const startTime = Date.getTime();
 
 const logDir = "./logs";
 const debugDir = "./debug";
@@ -29,6 +31,7 @@ console.log("start");
 function keepSessionAlive(){
     return nightmare
         .goto("https://ssb.vcu.edu/proddad/twbkwbis.P_GenMenu?name=bmenu.P_GenMnu")
+        .screenshot(`./logs/keepalive/${new Date().toUTCString().replace(/[,:]/g,'.')}.png`)
         .wait('body');
 }
 
@@ -134,15 +137,30 @@ function keepAlive(){
     setTimeout(()=>{
         keepSessionAlive().then( () => {
             console.log(`Keep session alive at ${new Date().toUTCString()}`);
-            keepAlive();
+            isLoggedIn.then( (isLoggedIn) => {
+                if(isLoggedIn){
+                    keepAlive();
+                } else {
+                    console.log(`   Login timed out`);
+                    console.log(ms(Date.getTime()-startTime, {verbose: true}));
+                }
+            }).catch( err => console.log(err));
         });
     }, keepSessionAliveTime);
 }
-if(keepSessionAliveTime){
-    keepAlive();
-}
+// if(keepSessionAliveTime){
+//     keepAlive();
+// }
+// loginToCAS().then( () => {
+//     findUpper(startInterval);
+// }).catch ( (err) => {
+//         console.log("Could not log in:");
+//         console.log(err);
+//         console.log("Maybe your credentials were incorrect? Placing screenshot 'loginFailed' in debug folder");
+//         nightmare.screenshot('./debug/loginFailed.png').end().then( () => {});
+// });
 loginToCAS().then( () => {
-    findUpper(startInterval);
+    keepAlive();
 }).catch ( (err) => {
         console.log("Could not log in:");
         console.log(err);
